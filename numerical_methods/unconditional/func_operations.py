@@ -6,6 +6,12 @@ from one_dim_optimization import dihotomy_method, sven_method, gen_function_with
 
 
 
+def i_loop(iter_count):
+    while iter_count != 0:
+        iter_count -= 1
+        yield
+    raise StopIteration
+
 def vect_mod(**X):
     return math.sqrt(sum([x**2 for _, x in X.items()]))
 
@@ -102,7 +108,6 @@ class Function:
         return self._sp_expr.diff(arg, num)
     
     def grad(self, num=1):
-        
         diffs = [[symb.name, self._sp_expr.diff(symb, num)] for symb in self._arguments]
         gradient = {}
         for name, d in diffs:
