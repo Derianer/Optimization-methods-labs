@@ -16,7 +16,8 @@ def vect_mod(**X):
     return math.sqrt(sum([x**2 for _, x in X.items()]))
 
 def calc_func_vect(func_vect:dict, **args) -> dict:
-    c_vect = {}
+    # c_vect = {} 
+    c_vect = OrderedDict() 
     for key, value in func_vect.items():
         if isinstance(value, Function):
             c_vect[key] = value(**args)
@@ -50,13 +51,14 @@ class Function:
     
     def __init__(self, expr):
         self._sp_expr = simplify(expr)
-        self._arguments = self._sp_expr.free_symbols
-        
+        unsorted_arguments = self._sp_expr.free_symbols
+        self._arguments = sorted([sym for sym in unsorted_arguments], key=lambda sym: sym.name)
+
     @result_formatting
     def __call__(self, **args):
         if isinstance(self._sp_expr, sympy.Number):
             return self._sp_expr
-        assert len(args) <= len(self._arguments), "Wrong arguments count" 
+        args = {arg:value for arg, value in args.items() if arg in self.get_arguments()}
         num_arguments = [(self._get_symbol_by_name(key), value) \
                         for key, value in args.items() if not isinstance(value, Function)]
         res_func = self._integrate(**args)
@@ -107,9 +109,10 @@ class Function:
         arg = arg_symb[0]
         return self._sp_expr.diff(arg, num)
     
-    def grad(self, num=1):
+    def grad(self, num=1, ):
         diffs = [[symb.name, self._sp_expr.diff(symb, num)] for symb in self._arguments]
-        gradient = {}
+        gradient = OrderedDict()
+        # gradient = {}
         for name, d in diffs:
             if d.is_Integer:
                 gradient[name] = int(d)
