@@ -47,6 +47,7 @@ def get_minors(hessian, num=-1):
     minors = []
     for i_key in hessian.keys():
         for j_key in hessian.keys():
+            
             if num == 0:
                 return minors 
             num -= 1
