@@ -23,12 +23,13 @@ def direct_coordinate_descent(func, X:dict, e, iter_count=-1):
         new_X = {}
         for key in X.keys():
             integrated = func.integrate(**{key:X[key]})
-            new_X[integrated.get_arguments()[0]] = one_dim_opt(integrated, e/10)
+            new_X[integrated.get_arguments()[0]] = one_dim_opt(integrated, e/100)
         # new_X = {key:one_dim_opt(value, e/10) for key, value in integrated.items()}
         delta = {key:abs(X[key] - new_X[key]) for key in X.keys()}
         X = new_X 
         if vect_mod(**delta) < e:
            return X 
+        yield X
     return X
 
 

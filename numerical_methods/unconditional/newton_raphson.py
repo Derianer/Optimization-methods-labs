@@ -152,7 +152,7 @@ def newton_raphson(func, X:dict, e1, e2, iter_count=-1):
             d = calc_grad
         steps = calc_steps(X, d) 
         integr_func = func.integrate(**steps)
-        opt_step = one_dim_opt(integr_func, e1/10)
+        opt_step = one_dim_opt(integr_func, 0.001)
         new_X = calc_func_vect(steps, **{'t': opt_step})
         cond1 = abs(func(**X) - func(**new_X))
         cond2 = abs(vect_mod(**X) - vect_mod(**new_X)) 
@@ -160,6 +160,7 @@ def newton_raphson(func, X:dict, e1, e2, iter_count=-1):
             cond2 <= e2: 
            return new_X
         X = new_X
+        yield X
     return X
         
 

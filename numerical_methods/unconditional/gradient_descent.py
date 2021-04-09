@@ -28,11 +28,11 @@ def gradient_descent(func, X:dict, e1, e2, iter_count=-1):
     if isinstance(func, str):
         func = Function(func) 
     gradient = func.grad()
+    calculated_grad = calc_grad(gradient, **X)
+    grad_module = grad_mod(**calculated_grad)
+    if grad_module < e1: 
+        return X
     while iter_count != 0: 
-        calculated_grad = calc_grad(gradient, **X)
-        grad_module = grad_mod(**calculated_grad)
-        if grad_module < e1: 
-            return X
         steps = calc_steps(X, calculated_grad)
         step_func = func.integrate(**steps)
         step ={'l':one_dim_opt(step_func, e1/100)}
@@ -41,7 +41,12 @@ def gradient_descent(func, X:dict, e1, e2, iter_count=-1):
         if compare_args(X, args_with_step, e2) and abs(func_with_step - func(**X)) <= e2:
             return args_with_step
         X = args_with_step
+        calculated_grad = calc_grad(gradient, **X)
+        grad_module = grad_mod(**calculated_grad)
         iter_count -= 1
+        if grad_module < e1 or iter_count == 0: 
+            return X
+        yield X
     return X
     
 def tests():

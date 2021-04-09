@@ -10,7 +10,6 @@ def i_loop(iter_count):
     while iter_count != 0:
         iter_count -= 1
         yield
-    raise StopIteration
 
 def vect_mod(**X):
     return math.sqrt(sum([x**2 for _, x in X.items()]))

@@ -20,7 +20,6 @@ def i_loop(iter_count):
     while iter_count != 0:
         iter_count -= 1
         yield
-    raise StopIteration
     
 def hooke_jeeves_method(func, X:dict, deltas:list, e, a=2, iter_count = -1):
     if isinstance(func, str):
@@ -47,6 +46,7 @@ def hooke_jeeves_method(func, X:dict, deltas:list, e, a=2, iter_count = -1):
             step_func = func.integrate(**steps)
             step = {'l':one_dim_opt(step_func, e=e/10)}
             X = calc_func_vect(steps, **step)
+            yield X
             # X = vec_operation(op.add, x_modif, vec_operation(lambda x: x*l, vec_operation(op.sub, x_modif, X)))
         else:
             count = 0
@@ -56,6 +56,7 @@ def hooke_jeeves_method(func, X:dict, deltas:list, e, a=2, iter_count = -1):
                     deltas[key] = delta/a
             if count == 0:
                 return X
+    return X
 
                     
 def test():
