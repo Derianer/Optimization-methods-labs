@@ -36,26 +36,29 @@ def determinant(hessian:dict):
                -(hessian[keys[0]][keys[1]] * hessian[keys[1]][keys[0]]) 
     else:
         det = []
-        for i, minor in enumerate(get_minors(hessian, len(hessian))):
+        minors = get_minors(hessian, len(hessian))
+        for minor, key, value in zip(minors, hessian):
+            print('ok')
+        
+        for i, key, minor in enumerate(get_minors(hessian, len(hessian)).items()):
             sign = -1 if i % 2 else 1
             det.append(sign * minor[0] * determinant(minor[1]))
         return sum(det)
 
-            
-
 def get_minors(hessian, num=-1):
-    minors = []
+    minors = OrderedDict()
     for i_key in hessian.keys():
+        minors[i_key] = OrderedDict()
         for j_key in hessian.keys():
-            
             if num == 0:
+                minors.pop(i_key)
                 return minors 
             num -= 1
             minor = OrderedDict()
             for m_key, m_value in hessian.items():
                 if j_key != m_key:
                     minor[m_key] = OrderedDict([(key, value) for key, value in m_value.items() if key != j_key])
-            minors.append((hessian[i_key][j_key], minor))
+            minors[i_key][j_key] = minor
     return minors
 
 
