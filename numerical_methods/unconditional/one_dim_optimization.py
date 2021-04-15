@@ -213,3 +213,38 @@ def fibonachi_method(func, a, b, e, e_const):
     calc_count = func()
     return Result(round(func_x, RES_ROUND), round(x, RES_ROUND), \
         [round(a, RES_ROUND), round(b, RES_ROUND)],N+1 , calc_count, 'Fibonachi', e)
+
+def func_to_standard_call(func_to_decorate):
+    def modificated(func, *args, **kwargs):
+        func = to_standard_call(func)
+        return func_to_decorate(func, *args, **kwargs)
+    return modificated
+        
+@func_to_standard_call
+def pauell_method(func, x, delta_x, e1, e2):
+    x_a = x
+    x_b = x_a + delta_x 
+    func_a = func(x_a)
+    func_b = func(x_b)
+    if func_b < func_a: 
+        delta_x = delta_x*2
+        x_c = x + delta_x 
+    else:
+        x_c = x - delta_x 
+    func_c = func(x_c)
+    while True:
+        args_and_func = {x_a:func_a, x_b:func_b, x_c:func_c}
+        min_x, min_f = min(args_and_func.items(), key=lambda item: item[1])
+        a1 = (func_b - func_a)/ (x_b - x_c)
+        a2 = (1/x_c - x_b)*(((func_c - func_a)/(x_c - x_a)) - (((func_b - func_a)/(x_b - x_a))))
+        x_pol = ((x_b + x_a)/(2*a2)) - (a1/(2*a2))
+        func_pol = func(x_pol)
+        if abs(min_f - func_pol) < e1 and abs(min_x - x_pol) < e2:
+            return Result(round(min_f, RES_ROUND), round(min_x, RES_ROUND), 0, 0, 0, "Pauell", e1)
+        x_max, _ = max(args_and_func.items(), key=lambda item: item[1])
+        args_and_func.pop(x_max)
+        best_x, best_f = (x_pol, func_pol) if func_pol < min_f else (min_x, min_f)
+        x_b = best_x
+        x_a = best_x - delta_x
+        x_c = best_x + delta_x
+        
