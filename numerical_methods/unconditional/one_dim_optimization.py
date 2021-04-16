@@ -247,4 +247,7 @@ def pauell_method(func, x, delta_x, e1, e2):
         x_b = best_x
         x_a = best_x - delta_x
         x_c = best_x + delta_x
+        func_a = func(x_a)
+        func_b = func(x_b)
+        func_c = func(x_c)
         

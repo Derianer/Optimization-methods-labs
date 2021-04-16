@@ -24,7 +24,7 @@ def main():
     x1, x2, x3 = sven_method(func=my_func, start_x=2, step_h=0.3)
     print(f'Sven method results: [{x1}, {x2}, {x3}]\n')
 
-    # show_result(dihotomy_method(my_func, x1, x3, e1))
+    show_result(dihotomy_method(my_func, x1, x3, e1))
 
     # show_result(dihotomy_method(my_func, x1, x3, e2))
     

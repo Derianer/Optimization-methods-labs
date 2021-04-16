@@ -52,9 +52,13 @@ class Function:
         self._sp_expr = simplify(expr)
         unsorted_arguments = self._sp_expr.free_symbols
         self._arguments = sorted([sym for sym in unsorted_arguments], key=lambda sym: sym.name)
+        self._already_calc = []
 
     @result_formatting
     def __call__(self, **args):
+        res = self.check_if_calculated(**args)
+        if res:
+            return res
         if isinstance(self._sp_expr, sympy.Number):
             return self._sp_expr
         args = {arg:value for arg, value in args.items() if arg in self.get_arguments()}
@@ -64,9 +68,16 @@ class Function:
         if not res_func.is_Number:
             assert len(num_arguments) == len(res_func.free_symbols) 
             result = res_func.subs(num_arguments)
+            self._already_calc.append([args, result])
             return result
         else:
             return res_func 
+            
+    def check_if_calculated(self, **args):
+        for calculated in self._already_calc:
+            if all([calculated[0][symbol.name] == args[symbol.name] for symbol in self._arguments]):
+                return calculated[1]
+        return False
             
 
             
