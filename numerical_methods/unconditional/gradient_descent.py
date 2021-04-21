@@ -1,7 +1,9 @@
 try:
-    from .func_operations import Function, one_dim_opt, calc_func_vect, vect_mod 
+    from .func_operations import Function, one_dim_opt, calc_func_vect, vect_mod
+    from .newton_raphson import hessian_matrix
 except ImportError:
     from func_operations import Function, one_dim_opt, calc_func_vect, vect_mod 
+    from newton_raphson import hessian_matrix
 from collections import OrderedDict
 import math
 
@@ -24,6 +26,29 @@ def compare_args(args1:dict, args2:dict, e):
             return False
     return True
 
+
+def calc_Hgrad(H, grad):
+    Hgrad = {}
+    for h_key, h_value in H.items():
+        Hgrad[h_key] = sum([h_value[d_key] * grad[d_key] for d_key in grad.keys()])
+        # for v_key, v_value in h_value:
+    return Hgrad 
+
+
+def scalar_mult(vect1, vect2):
+    return sum(vect1[key] * vect2[key] for key in vect1.keys())
+
+def g_calculation_formulas(func, **X):
+    grad = func.grad()
+    calculated_grad = calc_grad(grad, **X)
+    H = hessian_matrix(func)
+    numerator = scalar_mult(calculated_grad, calculated_grad)
+    Hgrad = calc_Hgrad(H, calculated_grad)
+    denominator = scalar_mult(Hgrad, calculated_grad) 
+    res = numerator/denominator
+    return float(res)
+    
+
 def gradient_descent(func, X:dict, e1, e2, iter_count=-1):
     if isinstance(func, str):
         func = Function(func) 
@@ -36,6 +61,7 @@ def gradient_descent(func, X:dict, e1, e2, iter_count=-1):
         steps = calc_steps(X, calculated_grad)
         step_func = func.integrate(**steps)
         step ={'l':one_dim_opt(step_func, e1/100)}
+        step2 = {'l': g_calculation_formulas(func, **X)}
         args_with_step = calc_grad(steps, **step)
         func_with_step = func(**args_with_step)
         if compare_args(X, args_with_step, e2) and abs(func_with_step - func(**X)) <= e2:
@@ -50,7 +76,8 @@ def gradient_descent(func, X:dict, e1, e2, iter_count=-1):
     return X
     
 def tests():
-    gradient_descent("8*x**2+4*x*y+5*y**2", {'x':4, 'y':-3}, 0.1, 0.1, 2) 
+    for res in gradient_descent("8*x**2+4*x*y+5*y**2", {'x':4, 'y':-3}, 0.1, 0.1, 2): 
+        print('ok')
 
 if __name__ == "__main__":
     tests()
