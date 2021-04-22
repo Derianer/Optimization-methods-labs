@@ -46,7 +46,7 @@ def one_dim_opt_pauell(func, e, e2):
         kwarg = {arg_name:x}
         return func(**kwarg)
     l1, l2, l3 = sven_method(func=func_to_opt, start_x=3, step_h=0.3)
-    result = pauell_method(func_to_opt, l2, 0.001, e , e2)
+    result = pauell_method(func_to_opt, l1, e, e , e2)
     return result.x
 
 def one_dim_opt_fibonachi(func, e, e2, ):

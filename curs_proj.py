@@ -19,10 +19,13 @@ def read_json():
 def iterate_gen(gen):
     res = yield from gen
     if res is not None:
-        yield res
+        yield (0, res)
 
 def iterate_method(method_gen):
     for i, res in enumerate(iterate_gen(method_gen)):
+        if isinstance(res, tuple):
+            print(f"Final result is: x = {res[1]['x']}, y = {res[1]['y']}")
+            break
         print(f"Iteration №{i+1}: x = {res['x']}, y = {res['y']}")
 
 def curs_project():
@@ -77,14 +80,3 @@ def curs_project():
 
 if __name__ == "__main__":
     curs_project()
-
-    
-    
-
-    # func = Function('(x-1)**2 + (y**2 - 3)')
-    # start_X = {'x':3, 'y': 4}
-    # tops = [{'x':8, 'y':9}, {'x':10, 'y':11}, {'x':8 ,'y':11}]
-    # deltas = {'x':1, 'y': 1}
-    # E1 = 0.01
-    # E2 = 0.015
-    # iteration_count = -1

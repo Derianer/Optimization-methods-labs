@@ -1,9 +1,9 @@
 {
-    "function":"(x-1)**2 + (y**2-3)",
+    "function":"(x-1)**2 + (y**2 - 3)",
     "direct_gradinet_descent_settings":
     {
         "start_X":{"x":3, "y":4},
-        "e":0.01,
+        "e":0.1,
         "iteration_count":-1,
         "enable": true
     },

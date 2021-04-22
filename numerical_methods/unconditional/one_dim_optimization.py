@@ -222,6 +222,7 @@ def func_to_standard_call(func_to_decorate):
         
 @func_to_standard_call
 def pauell_method(func, x, delta_x, e1, e2):
+    best_results = []
     count = 3 
     temp = delta_x 
     while temp < 1:
@@ -245,20 +246,26 @@ def pauell_method(func, x, delta_x, e1, e2):
         a1 = fbfa/xbxc
         a2 = count_a2(x_a, x_b, x_c, func_a, func_b, func_c, count)
         # a2 = (1/x_c - x_b)*(((func_c - func_a)/(x_c - x_a)) - (((func_b - func_a)/(x_b - x_a))))
-        x_pol = ((x_b + x_a)/(2*a2)) - (a1/(2*a2))
+        x_pol = ((x_b + x_a)/(2)) - (a1/(2*a2))
         func_pol = func(x_pol)
         term1 = abs(min_f - func_pol)
         term2 = abs(min_x - x_pol)
         if abs(min_f - func_pol) < e1 and abs(min_x - x_pol) < e2:
             return Result(round(min_f, RES_ROUND), round(min_x, RES_ROUND), 0, 0, 0, "Pauell", e1)
-        if abs(x_pol - min_x) < e1:
-            return Result(round(min_f, RES_ROUND), round(min_x, RES_ROUND), 0, 0, 0, "Pauell", e1)
         x_max, _ = max(args_and_func.items(), key=lambda item: item[1])
         args_and_func.pop(x_max)
         best_x, best_f = (x_pol, func_pol) if func_pol < min_f else (min_x, min_f)
+        if len(best_results) > 5: 
+            results = best_results[-5:-1]
+            if all([bx == best_x for bx in results]):
+                return Result(round(min_f, RES_ROUND), round(min_x, RES_ROUND), 0, 0, 0, "Pauell", e1)
+        if len(best_results) > 6:
+            best_results.pop(0)
+        best_results.append(best_x)
         x_b = best_x 
         x_a = best_x - delta_x
         x_c = best_x + delta_x
+        x_a, x_b, x_c = sorted([x_a, x_b, x_c])
         func_a = func(x_a)
         func_b = func(x_b)
         func_c = func(x_c)
