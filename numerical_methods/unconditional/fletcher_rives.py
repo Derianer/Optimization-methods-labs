@@ -64,6 +64,7 @@ def fletcher_rives(func, X, e1, e2, iter_count=-1):
         next_X = calc_func_vect(step_form,  **{'t': step})
         if compare_args(next_X, X, e2) and abs(func(**next_X) - func(**X)) < e2:
             return next_X 
+        yield next_X
         prev_X = X
         X = next_X
         prev_d = d

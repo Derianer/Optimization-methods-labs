@@ -1,8 +1,8 @@
 try:
-    from .func_operations import Function, one_dim_opt, calc_func_vect, vect_mod
+    from .func_operations import Function, one_dim_opt_pauell, one_dim_opt_pauell, calc_func_vect, vect_mod
     from .newton_raphson import hessian_matrix
 except ImportError:
-    from func_operations import Function, one_dim_opt, calc_func_vect, vect_mod 
+    from func_operations import Function, one_dim_opt_pauell, one_dim_opt_pauell, calc_func_vect, vect_mod 
     from newton_raphson import hessian_matrix
 from collections import OrderedDict
 import math
@@ -60,8 +60,8 @@ def gradient_descent(func, X:dict, e1, e2, iter_count=-1):
     while iter_count != 0: 
         steps = calc_steps(X, calculated_grad)
         step_func = func.integrate(**steps)
-        step ={'l':one_dim_opt(step_func, e1/100)}
-        step2 = {'l': g_calculation_formulas(func, **X)}
+        # step ={'l':one_dim_opt(step_func, e1/100)}
+        step = {'l': g_calculation_formulas(func, **X)}
         args_with_step = calc_grad(steps, **step)
         func_with_step = func(**args_with_step)
         if compare_args(X, args_with_step, e2) and abs(func_with_step - func(**X)) <= e2:

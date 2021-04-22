@@ -1,0 +1,39 @@
+{
+    "function":"(x-1)**2 + (y**2-3)",
+    "direct_gradinet_descent_settings":
+    {
+        "start_X":{"x":3, "y":4},
+        "e":0.01,
+        "iteration_count":-1,
+        "enable": true
+    },
+    "nelder_mid_settings":
+    {
+        "tops":[{"x":2, "y":2}, {"x":3, "y":3}, {"x":3 ,"y":2}], 
+        "e":0.001,
+        "alpha":1,
+        "beta":0.5,
+        "gamma":2,
+        "enable": true
+    },
+    "hooke_jeeves_settings":
+    {
+        "start_X":{"x":3, "y":4},
+        "deltas":{"x":1, "y": 1},
+        "e":0.01,
+        "enable": true
+    },
+    "fastest_gradient_descent_settings":
+    {
+        "start_X":{"x":3, "y":4},
+        "e1":0.01,
+        "e2":0.015,
+        "enable": true
+    },
+    "fletcher_rives_settings":{
+        "start_X":{"x":3, "y":4},
+        "e1":0.01,
+        "e2":0.015,
+        "enable": true
+    }
+}

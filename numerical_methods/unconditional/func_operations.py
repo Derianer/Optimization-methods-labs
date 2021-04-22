@@ -2,7 +2,10 @@ from sympy import Symbol, simplify, lambdify
 import sympy
 import math
 from collections import OrderedDict
-from one_dim_optimization import dihotomy_method, sven_method, gen_function_with_counter, Result
+try:
+    from .one_dim_optimization import dihotomy_method, sven_method, gen_function_with_counter, Result, golden_section_method, fibonachi_method, pauell_method
+except:
+    from one_dim_optimization import dihotomy_method, sven_method, gen_function_with_counter, Result, golden_section_method, fibonachi_method, pauell_method
 
 
 
@@ -33,6 +36,39 @@ def one_dim_opt(func, e, opt_method=dihotomy_method):
         return func(**kwarg)
     l1, l2, l3 = sven_method(func=func_to_opt, start_x=3, step_h=0.3)
     result = opt_method(func_to_opt, l1, l3, e)
+    return result.x
+
+def one_dim_opt_pauell(func, e, e2):
+    assert func.is_one_dim(), "Function is not one dimentional"
+    arg_name = func.get_arguments()[0]
+    @gen_function_with_counter
+    def func_to_opt(x):
+        kwarg = {arg_name:x}
+        return func(**kwarg)
+    l1, l2, l3 = sven_method(func=func_to_opt, start_x=3, step_h=0.3)
+    result = pauell_method(func_to_opt, l2, 0.001, e , e2)
+    return result.x
+
+def one_dim_opt_fibonachi(func, e, e2, ):
+    assert func.is_one_dim(), "Function is not one dimentional"
+    arg_name = func.get_arguments()[0]
+    @gen_function_with_counter
+    def func_to_opt(x):
+        kwarg = {arg_name:x}
+        return func(**kwarg)
+    l1, l2, l3 = sven_method(func=func_to_opt, start_x=3, step_h=0.3)
+    result = fibonachi_method(func_to_opt, l1, l3, e, e/10)
+    return result.x
+
+def one_dim_opt_golden(func, e, e2, ):
+    assert func.is_one_dim(), "Function is not one dimentional"
+    arg_name = func.get_arguments()[0]
+    @gen_function_with_counter
+    def func_to_opt(x):
+        kwarg = {arg_name:x}
+        return func(**kwarg)
+    l1, l2, l3 = sven_method(func=func_to_opt, start_x=3, step_h=0.3)
+    result = golden_section_method(func_to_opt, l1, l3, e)
     return result.x
 
 class Function:

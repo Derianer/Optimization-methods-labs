@@ -53,6 +53,7 @@ def nelder_mid(func, tops:list, e=0.01, alpha=1, beta=0.5, gamma=2):
                     #     new_top[key] = top[key] + s
                     new_tops.append(new_top)
                 tops = new_tops
+        yield best_point
             
             
                 

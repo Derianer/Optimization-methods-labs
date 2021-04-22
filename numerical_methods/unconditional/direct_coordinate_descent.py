@@ -1,7 +1,7 @@
 try:
-    from .func_operations import Function, one_dim_opt, vect_mod
+    from .func_operations import Function, one_dim_opt_fibonachi, one_dim_opt_pauell, one_dim_opt_golden, vect_mod
 except ImportError:
-    from func_operations import Function, one_dim_opt, vect_mod
+    from func_operations import Function, one_dim_opt_fibonachi, one_dim_opt_pauell, one_dim_opt_golden, vect_mod
 
 
 def i_loop(iter_count):
@@ -15,7 +15,7 @@ def integrate_args_to_func(func, **kwargs):
     return integrated
 
 
-def direct_coordinate_descent(func, X:dict, e, iter_count=-1):
+def direct_coordinate_descent(func, X:dict, e, opt_method_name='Pauell', iter_count=-1):
     if isinstance(func, str):
         func = Function(func) 
     for _ in i_loop(iter_count):
@@ -23,7 +23,10 @@ def direct_coordinate_descent(func, X:dict, e, iter_count=-1):
         new_X = {}
         for key in X.keys():
             integrated = func.integrate(**{key:X[key]})
-            new_X[integrated.get_arguments()[0]] = one_dim_opt(integrated, e/100)
+            if  opt_method_name == 'Pauell':
+                new_X[integrated.get_arguments()[0]] = one_dim_opt_pauell(integrated, e, e)
+            elif opt_method_name == 'Golden':
+                new_X[integrated.get_arguments()[0]] = one_dim_opt_golden(integrated, e/10, e/100)
         # new_X = {key:one_dim_opt(value, e/10) for key, value in integrated.items()}
         delta = {key:abs(X[key] - new_X[key]) for key in X.keys()}
         X = new_X 

@@ -1,6 +1,6 @@
 import operator as op
 try:
-    from .func_operations import Function, one_dim_opt, calc_func_vect
+    from .func_operations import Function, one_dim_opt, calc_func_vect, one_dim_opt_fibonachi
 except ImportError:
     from func_operations import Function, one_dim_opt, calc_func_vect
 
@@ -44,7 +44,7 @@ def hooke_jeeves_method(func, X:dict, deltas:list, e, a=2, iter_count = -1):
             d = dict([(key, value - X[key]) for key, value in x_modif.items()])
             steps = calc_steps(X, d)
             step_func = func.integrate(**steps)
-            step = {'l':one_dim_opt(step_func, e=e/10)}
+            step = {'l':one_dim_opt_fibonachi(step_func, e=e/10, e2=e/10)}
             X = calc_func_vect(steps, **step)
             yield X
             # X = vec_operation(op.add, x_modif, vec_operation(lambda x: x*l, vec_operation(op.sub, x_modif, X)))
